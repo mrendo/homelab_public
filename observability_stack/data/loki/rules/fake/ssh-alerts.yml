@@ -10,10 +10,10 @@ groups:
           |~ "(?i)failed password"
           | regexp "(?i)failed password for (invalid user )?(?P<user>\\S+) from (?P<src_ip>\\d+\\.\\d+\\.\\d+\\.\\d+)"
           [10m])
-          ) > 0
-        for: 0m
+          ) > 5
+        for: 1m
         labels:
-          severity: warning 
+          severity: warning
         annotations:
           summary: "SSH failed password attempts"
           description: "Multiple failed login attempts for {{ $labels.user }} on {{ $labels.host }} from IP {{ $labels.src_ip }}"
