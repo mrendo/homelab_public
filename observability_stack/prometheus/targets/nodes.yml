@@ -1,0 +1,6 @@
+- targets:
+    - host.containers.internal:9100
+  labels:
+    nodename: obsstack.internal
+    env: homelab
+

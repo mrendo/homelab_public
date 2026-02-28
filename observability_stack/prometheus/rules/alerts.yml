@@ -1,0 +1,20 @@
+groups:
+  - name: basic-health
+    rules:
+      - alert: TargetDown
+        expr: up == 0
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Target down: {{ $labels.job }} ({{ $labels.instance }})"
+          description: "Prometheus cannot scrape {{ $labels.job }} at {{ $labels.instance }} for 2 minutes."
+
+      - alert: PrometheusConfigReloadFailed
+        expr: prometheus_config_last_reload_successful == 0
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Prometheus config reload failing"
+          description: "Prometheus config reload has been failing for 2 minutes."

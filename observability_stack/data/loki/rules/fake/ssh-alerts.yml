@@ -1,0 +1,20 @@
+groups:
+  - name: ssh-auth
+    interval: 1m
+    rules:
+      - alert: SSHFailedPassword
+        expr: |
+          sum by (host, src_ip, user) (
+          count_over_time(
+          {app=~"sshd-session|sshd"}
+          |~ "(?i)failed password"
+          | regexp "(?i)failed password for (invalid user )?(?P<user>\\S+) from (?P<src_ip>\\d+\\.\\d+\\.\\d+\\.\\d+)"
+          [10m])
+          ) > 0
+        for: 0m
+        labels:
+          severity: warning 
+        annotations:
+          summary: "SSH failed password attempts"
+          description: "Multiple failed login attempts for {{ $labels.user }} on {{ $labels.host }} from IP {{ $labels.src_ip }}"
+
